@@ -1,9 +1,11 @@
 clear;
+%% PART 0: identify the files to be analyzed
+% Always run this part before any other parts below
 FILE = [dir('_images/*1.tif'); dir('_images/*2.tif'); dir('_images/*3.tif'); dir('_images/*4.tif')];
 test = struct2cell(FILE);
 ID = [extractBetween(test(1, :), '-', '_'); extractBetween(test(1, :), '_', '.')]';
 
-%% PART 1
+%% PART 1: segment images and make results matlab file
 tic;
 j = 1;
 RES = zeros(1e6, 6);
@@ -26,7 +28,7 @@ RES(j:end, :) = [];
 save('results', 'RES');
 toc;
 
-%% PART 2
+%% PART 2: visualize the number of each cell type in each image
 tic;
 load('results');
 RES(:, 7:9) = squeeze(rgb2hsv(reshape(RES(:, 4:6), [], 1, 3)));
@@ -51,7 +53,7 @@ for n = 1:size(FILE, 1)
 end
 toc;
 
-%% PART 3
+%% PART 3: make final figure with all segmented cells pooled
 tic;
 load('results');
 RES(:, 7:9) = squeeze(rgb2hsv(reshape(RES(:, 4:6), [], 1, 3)));
